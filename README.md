@@ -1,2 +1,2 @@
 # HOMERO-V1
-Repositorio que contiene infromacion acerca del desarrollo del prototipo para robot limpia vidrios HOMERO V1, proyecto final de la asignatura de fundamentos de electronica
+Repository containing information about the development of the prototype for the HOMERO V1 window-cleaning robot, final project for the subject of electronics fundamentals
