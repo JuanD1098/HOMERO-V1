@@ -1,7 +1,7 @@
 #include "OLED_1306.h"
 
 // Constructor
-OLED::OLED() : screen(128, 64, &Wire) {
+OLED::OLED() : screen(128, 64, &Wire, -1) {
     // Configura el tamaño de la pantalla y usa I2C con la librería Adafruit
 }
 
@@ -21,8 +21,15 @@ void OLED::clearDisplay() {
 }
 
 // Método para imprimir texto en la pantalla
-void OLED::printText(const char* text, int x, int y) {
+void OLED::printTextS(const char* text, int x, int y) {
     screen.setTextSize(1);           // Tamaño de texto
+    screen.setTextColor(SSD1306_WHITE);  // Color de texto
+    screen.setCursor(x, y);          // Posición del cursor
+    screen.print(text);              // Imprime el texto en la pantalla
+}
+// Método para imprimir texto en la pantalla
+void OLED::printTextM(const char* text, int x, int y) {
+    screen.setTextSize(2);           // Tamaño de texto
     screen.setTextColor(SSD1306_WHITE);  // Color de texto
     screen.setCursor(x, y);          // Posición del cursor
     screen.print(text);              // Imprime el texto en la pantalla

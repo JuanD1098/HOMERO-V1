@@ -10,11 +10,12 @@ public:
     OLED();                             // Constructor
     void begin();                       // Inicializa la pantalla
     void clearDisplay();                // Borra la pantalla
-    void printText(const char* text, int x, int y);  // Imprime texto en coordenadas específicas
+    void printTextS(const char* text, int x, int y);
+    void printTextM(const char* text, int x, int y);  // Imprime texto en coordenadas específicas
     void display();                     // Actualiza la pantalla
 
 private:
-    Adafruit_SSD1306 screen = Adafruit_SSD1306(128, 64, &Wire);  // Instancia de la pantalla SSD1306
+    Adafruit_SSD1306 screen;  // Instancia de la pantalla SSD1306
 };
 
 #endif
