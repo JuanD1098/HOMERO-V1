@@ -3,9 +3,11 @@
 #include "Motor.h"
 
 // Frecuencia de PWM en Hz (20 kHz) y resolución de 8 bits (0-255)
-int pwmFreq = 20000;       // Alta frecuencia para reducir ruido del motor
+int pwmFreq = 16000;       // Alta frecuencia para reducir ruido del motor
 int pwmResolution = 8;     // Resolución de 8 bits para el PWM
+int pwmFreq2 = 8000; 
 
+int ESCFreq = 0;
 // Constructor de la clase Motor
 // Inicializa los pines y canales PWM para el control de dirección y velocidad
 Motor::Motor(int pinA, int pinB, int channelA, int channelB)
@@ -16,8 +18,8 @@ Motor::Motor(int pinA, int pinB, int channelA, int channelB)
     pinMode(inPinB, OUTPUT);
 
     // Configura los canales PWM para inPinA y inPinB del puente H
-    ledcSetup(pwmChannelA, pwmFreq, pwmResolution);
-    ledcSetup(pwmChannelB, pwmFreq, pwmResolution);
+    ledcSetup(pwmChannelA, pwmFreq2, pwmResolution);
+    ledcSetup(pwmChannelB, pwmFreq2, pwmResolution);
 
     // Asignar pines a los canales PWM correspondientes
     ledcAttachPin(inPinA, pwmChannelA);  // Canal PWM para inPinA
@@ -25,14 +27,35 @@ Motor::Motor(int pinA, int pinB, int channelA, int channelB)
 }
 
 // Constructor de la clase RMotor
-RMotor::RMotor(int rPin, int rChannel) : rodilloPin(rPin), rodilloChannel(rChannel) {
-    // Configuración del pin del rodillo como salida
+RMotor::RMotor(int rPin, int rChannel) 
+    : rodilloPin(rPin), rodilloChannel(rChannel) {
+
     pinMode(rodilloPin, OUTPUT);
 
-    // Configura el canal PWM para el rodillo (TIP122)
-    ledcSetup(rodilloChannel, pwmFreq, pwmResolution);
-    ledcAttachPin(rodilloPin, rodilloChannel);  // Canal PWM para el rodillo
+    // Cambia el canal PWM para el rodillo
+    ledcSetup(rodilloChannel, pwmFreq2, pwmResolution);
+    ledcAttachPin(rodilloPin, rodilloChannel);
+
 }
+
+// Constructor de la clase ESC
+ESC::ESC(int EPin) : ESCPin(EPin) {}
+
+// Configura el ESC con el rango de pulsos
+void ESC::attach(int minPulse, int maxPulse) {
+    esc.attach(ESCPin, minPulse, maxPulse);
+}
+
+// Control de velocidad del ESC
+void ESC::speedESC(int speed) {
+    if (speed > 0) {
+        int escSignal = map(speed, 0, 255, 1000, 2000);  // Convierte a rango de pulsos
+        esc.writeMicroseconds(escSignal);                  // Enviar señal PWM
+    } else {
+        esc.writeMicroseconds(1000);  // Apagar ESC con señal mínima
+    }
+}
+
 
 void Motor::setSpeed(int speed) {
     if (speed > 0) {
@@ -53,7 +76,8 @@ void Motor::setSpeed(int speed) {
 }
 
 void RMotor::speedrodillo(int speed) {
-    if (speed > 0) {
+    if (speed > -250 ) {
+         int speedESC= map(speed, -255, 255, 0, 255);
     // Aplica el valor absoluto del PWM al canal del rodillo
     ledcWrite(rodilloChannel, abs(speed));  // PWM directo en el canal del rodillo
 } 
@@ -62,3 +86,4 @@ else {
 }
 
 }
+

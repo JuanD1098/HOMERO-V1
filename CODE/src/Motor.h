@@ -3,6 +3,7 @@
 #define MOTOR_H
 
 #include <Arduino.h>
+#include <ESP32Servo.h>
 
 class Motor {
     private:
@@ -34,4 +35,16 @@ private:
 
 };
 
+class ESC {
+private:
+    int ESCPin;             // Pin exclusivo para el control del ESC
+    Servo esc;              // Objeto de la clase Servo para control del ESC
+
+public:
+    ESC(int EPin);                     // Constructor
+    void attach(int minPulse, int maxPulse); // Configurar el ESC
+    void speedESC(int speed);          // Control de velocidad del ESC
+};
+
 #endif // MOTOR_H
+

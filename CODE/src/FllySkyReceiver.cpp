@@ -14,7 +14,7 @@ void FlySkyReceiver::AllChannels() {
   for (int ch = 0; ch < 10; ch++) {
     channelValues[ch] = IBus.readChannel(ch);  // Leer el valor del canal actual
     PWM_CH[ch] = map(channelValues[ch], 1000, 2000, -255, 255);
-    PWM_CH[ch] = constrain(PWM_CH[ch], -200, 200);  // Asegurar que el valor esté en el rango 0-255
+    PWM_CH[ch] = constrain(PWM_CH[ch], -255, 255);  // Asegurar que el valor esté en el rango 0-255
   } 
 }   
 
@@ -31,7 +31,8 @@ void FlySkyReceiver::printChannelValues() {
 
 // Método para obtener el valor PWM de un canal específico
 int FlySkyReceiver::getChannelPWM(int channelNumber) {
-  if (channelNumber >= 0 && channelNumber < 10) {  // Verificar rango válido
+  if (channelNumber >= 0 && channelNumber <=
+   10) {  // Verificar rango válido
     return PWM_CH[channelNumber-1];
     } 
     else {
