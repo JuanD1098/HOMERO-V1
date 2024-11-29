@@ -3,11 +3,10 @@
 #include "Motor.h"
 
 // Frecuencia de PWM en Hz (20 kHz) y resolución de 8 bits (0-255)
-int pwmFreq = 16000;       // Alta frecuencia para reducir ruido del motor
+int pwmFreq = 8000;       // Alta frecuencia para reducir ruido del motor
 int pwmResolution = 8;     // Resolución de 8 bits para el PWM
-int pwmFreq2 = 8000; 
+int pwmFreq2 = 5000; 
 
-int ESCFreq = 0;
 // Constructor de la clase Motor
 // Inicializa los pines y canales PWM para el control de dirección y velocidad
 Motor::Motor(int pinA, int pinB, int channelA, int channelB)
@@ -18,8 +17,8 @@ Motor::Motor(int pinA, int pinB, int channelA, int channelB)
     pinMode(inPinB, OUTPUT);
 
     // Configura los canales PWM para inPinA y inPinB del puente H
-    ledcSetup(pwmChannelA, pwmFreq2, pwmResolution);
-    ledcSetup(pwmChannelB, pwmFreq2, pwmResolution);
+    ledcSetup(pwmChannelA, pwmFreq, pwmResolution);
+    ledcSetup(pwmChannelB, pwmFreq, pwmResolution);
 
     // Asignar pines a los canales PWM correspondientes
     ledcAttachPin(inPinA, pwmChannelA);  // Canal PWM para inPinA
@@ -77,9 +76,9 @@ void Motor::setSpeed(int speed) {
 
 void RMotor::speedrodillo(int speed) {
     if (speed > -250 ) {
-         int speedESC= map(speed, -255, 255, 0, 255);
+         int speedM= map(speed, -255, 255, 0, 255);
     // Aplica el valor absoluto del PWM al canal del rodillo
-    ledcWrite(rodilloChannel, abs(speed));  // PWM directo en el canal del rodillo
+    ledcWrite(rodilloChannel, speedM);  // PWM directo en el canal del rodillo
 } 
 else { 
     ledcWrite(rodilloChannel, 0);
